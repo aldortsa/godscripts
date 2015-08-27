@@ -12,13 +12,12 @@
 #10 domain1
 #11 domain2
 backup_date=`date +%Y_%m_%d_%H_%M_%S`
-mysqldump -u$2 -p$3 -h$5 $4 > $1/$4.${backup_date}.sql
-tar -czvf $1/$4.${backup_date}.tgz $1/$4.${backup_date}.sql
+ssh root@23.253.175.99 "mysqldump -u$2 -hlocalhost -p$3 $4" > $1/$4.${backup_date}.stag.sql
 
-mysqldump -u$6 -p$7 -h$9 $8 > $1/$8.${backup_date}.sql
-tar -czvf $1/$8.${backup_date}.tgz $1/$8.${backup_date}.sql
-sed -i "s/${10}/${11}/g" $1/$4.${backup_date}.sql
+mysqldump -u$6 -p$7 -h$9 $8 > $1/$8.${backup_date}.prod.sql
+tar -czvf $1/$8.${backup_date}.tgz $1/$8.${backup_date}.prod.sql
+sed -i "s/${10}/${11}/g" $1/$4.${backup_date}.stag.sql
 
-mysql -u$6 -p$7 -h$9 $8 < $1/$4.${backup_date}.sql
-rm $1/$8.${backup_date}.sql
-rm $1/$4.${backup_date}.sql
+mysql -u$6 -p$7 -h$9 $8 < $1/$4.${backup_date}.stag.sql
+rm $1/$8.${backup_date}.prod.sql
+rm $1/$4.${backup_date}.stag.sql
